@@ -7,6 +7,7 @@ theme = 'PaperModX'
   # Basic settings
   author = "NaskovAI"
   description = "A blog about AI, technology, and innovation"
+  math = true
   
   # Theme specific settings
   defaultTheme = "auto" # dark, light, auto
@@ -27,12 +28,16 @@ theme = 'PaperModX'
   tocopen = false
 
 [params.homeInfoParams]
-  Title = "Welcome to @naskovai"
-  Content = "AI, technology, and innovation insights"
+  Title = "@naskovai"
+  Content = "AI insights and technical articles"
 
 [[params.socialIcons]]
   name = "github"
   url = "https://github.com/naskovai"
+
+[[params.socialIcons]]
+  name = "x"
+  url = "https://x.com/naskovai"
 
 [menu]
   [[menu.main]]
@@ -58,3 +63,4 @@ theme = 'PaperModX'
     guessSyntax = true
     lineNos = true
     style = "github"
+

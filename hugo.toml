@@ -2,6 +2,7 @@ baseURL = 'https://naskovai.github.io/'
 languageCode = 'en-us'
 title = '@naskovai'
 theme = 'PaperModX'
+enableRobotsTXT = true
 
 [params]
   # Basic settings

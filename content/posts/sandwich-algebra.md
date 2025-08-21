@@ -7,8 +7,6 @@ tags = ['linear-algebra', 'mathematics', 'eigenvalues', 'svd', 'decompositions']
 math = true
 +++
 
-# The Sandwich Framework for Understanding Linear Algebra: Coordinate Translations, Scaling, and State Transitions
-
 ## Core Philosophy: Translate → Transform → Translate Back
 
 Every fundamental linear algebra operation follows the same pattern:

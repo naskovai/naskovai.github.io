@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>Posts on @naskovai</title>
-    <link>http://localhost:1313/posts/</link>
-    <description>Recent content in Posts on @naskovai</description>
+    <title>Linear-Algebra on @naskovai</title>
+    <link>http://localhost:1313/tags/linear-algebra/</link>
+    <description>Recent content in Linear-Algebra on @naskovai</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 21 Aug 2025 00:10:41 -0700</lastBuildDate><atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 21 Aug 2025 00:10:41 -0700</lastBuildDate><atom:link href="http://localhost:1313/tags/linear-algebra/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>The Sandwich Framework for Understanding Linear Algebra</title>
       <link>http://localhost:1313/posts/sandwich-algebra/</link>
@@ -352,26 +352,6 @@ Same <strong>translate → simple scale → translate back</strong> sandwich.</l
 </ul>
 <p><strong>Key insight</strong>: The translate step (rightmost) may be orthogonal (rotation) or general (potentially distorting).</p>
 <p>The magic is that this <strong>same pattern</strong> explains eigendecomposition, SVD, projections, least squares, whitening, and more. The differences are just in <em>which</em> coordinate systems are natural and <em>what</em> simple operation happens there.</p>
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>Welcome to NaskovAI Blog</title>
-      <link>http://localhost:1313/posts/first-post/</link>
-      <pubDate>Wed, 20 Aug 2025 23:56:49 -0700</pubDate>
-      
-      <guid>http://localhost:1313/posts/first-post/</guid>
-      <description>First post introducing the blog</description>
-      <content:encoded><![CDATA[<h1 id="welcome-to-naskovai-blog">Welcome to NaskovAI Blog</h1>
-<p>This is the inaugural post of the NaskovAI blog! Here we&rsquo;ll be sharing insights about artificial intelligence, technology trends, and innovative solutions.</p>
-<h2 id="what-to-expect">What to Expect</h2>
-<ul>
-<li>In-depth articles about AI and machine learning</li>
-<li>Technology reviews and analysis</li>
-<li>Open source project highlights</li>
-<li>Industry news and commentary</li>
-</ul>
-<p>Stay tuned for more content coming soon!</p>
 ]]></content:encoded>
     </item>
     

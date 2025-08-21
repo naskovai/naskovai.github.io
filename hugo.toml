@@ -1,6 +1,6 @@
 baseURL = 'https://naskovai.github.io/'
 languageCode = 'en-us'
-title = 'NaskovAI Blog'
+title = '@naskovai'
 theme = 'PaperModX'
 
 [params]
@@ -27,8 +27,8 @@ theme = 'PaperModX'
   tocopen = false
 
 [params.homeInfoParams]
-  Title = "Welcome to NaskovAI Blog"
-  Content = "A place to share thoughts on AI, technology, and innovation"
+  Title = "Welcome to @naskovai"
+  Content = "AI, technology, and innovation insights"
 
 [[params.socialIcons]]
   name = "github"

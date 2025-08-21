@@ -32,18 +32,6 @@
     <loc>http://localhost:1313/about/</loc>
     <lastmod>2025-08-20T23:56:59-07:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/ai/</loc>
-    <lastmod>2025-08-20T23:56:49-07:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/introduction/</loc>
-    <lastmod>2025-08-20T23:56:49-07:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/tags/technology/</loc>
-    <lastmod>2025-08-20T23:56:49-07:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/posts/first-post/</loc>
-    <lastmod>2025-08-20T23:56:49-07:00</lastmod>
-  </url><url>
     <loc>http://localhost:1313/categories/</loc>
   </url>
 </urlset>

@@ -29,8 +29,8 @@ enableRobotsTXT = true
   tocopen = false
 
 [params.homeInfoParams]
-  Title = "@naskovai"
-  Content = "AI insights and technical articles"
+  Title = "Welcome to @naskovai's blog"
+  Content = ""
 
 [[params.socialIcons]]
   name = "github"

@@ -57,35 +57,5 @@
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
     
-    <item>
-      <title>Ai</title>
-      <link>http://localhost:1313/tags/ai/</link>
-      <pubDate>Wed, 20 Aug 2025 23:56:49 -0700</pubDate>
-      
-      <guid>http://localhost:1313/tags/ai/</guid>
-      <description></description>
-      <content:encoded><![CDATA[]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>Introduction</title>
-      <link>http://localhost:1313/tags/introduction/</link>
-      <pubDate>Wed, 20 Aug 2025 23:56:49 -0700</pubDate>
-      
-      <guid>http://localhost:1313/tags/introduction/</guid>
-      <description></description>
-      <content:encoded><![CDATA[]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>Technology</title>
-      <link>http://localhost:1313/tags/technology/</link>
-      <pubDate>Wed, 20 Aug 2025 23:56:49 -0700</pubDate>
-      
-      <guid>http://localhost:1313/tags/technology/</guid>
-      <description></description>
-      <content:encoded><![CDATA[]]></content:encoded>
-    </item>
-    
   </channel>
 </rss>

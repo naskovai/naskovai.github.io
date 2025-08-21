@@ -1,0 +1,60 @@
+baseURL = 'https://naskovai.github.io/'
+languageCode = 'en-us'
+title = 'NaskovAI Blog'
+theme = 'PaperModX'
+
+[params]
+  # Basic settings
+  author = "NaskovAI"
+  description = "A blog about AI, technology, and innovation"
+  
+  # Theme specific settings
+  defaultTheme = "auto" # dark, light, auto
+  ShowReadingTime = true
+  ShowShareButtons = true
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+  ShowWordCount = true
+  ShowRssButtonInSectionTermList = true
+  UseHugoToc = true
+  disableSpecial1stPost = false
+  disableScrollToTop = false
+  comments = false
+  hidemeta = false
+  hideSummary = false
+  showtoc = false
+  tocopen = false
+
+[params.homeInfoParams]
+  Title = "Welcome to NaskovAI Blog"
+  Content = "A place to share thoughts on AI, technology, and innovation"
+
+[[params.socialIcons]]
+  name = "github"
+  url = "https://github.com/naskovai"
+
+[menu]
+  [[menu.main]]
+    identifier = "home"
+    name = "Home"
+    url = "/"
+    weight = 10
+  [[menu.main]]
+    identifier = "posts"
+    name = "Posts"
+    url = "/posts/"
+    weight = 20
+  [[menu.main]]
+    identifier = "about"
+    name = "About"
+    url = "/about/"
+    weight = 30
+
+[markup]
+  [markup.highlight]
+    noClasses = false
+    codeFences = true
+    guessSyntax = true
+    lineNos = true
+    style = "github"

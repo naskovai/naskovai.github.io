@@ -1,0 +1,15 @@
+/* Fix the homeInfoParams fixed height issue */
+.first-entry.home-info {
+    min-height: auto !important;
+    height: auto !important;
+}
+
+.first-entry.home-info .entry-content {
+    min-height: auto !important;
+    height: auto !important;
+}
+
+.first-entry.home-info .entry-header {
+    min-height: auto !important;
+    height: auto !important;
+}

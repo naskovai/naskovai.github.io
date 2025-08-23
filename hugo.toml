@@ -33,16 +33,16 @@ enableRobotsTXT = true
   Content = ""
 
 [[params.socialIcons]]
-  name = "github"
-  url = "https://github.com/naskovai"
-
-[[params.socialIcons]]
   name = "x"
   url = "https://x.com/naskovai"
 
 [[params.socialIcons]]
   name = "substack"
   url = "https://naskovai.substack.com/"
+
+[[params.socialIcons]]
+  name = "github"
+  url = "https://github.com/naskovai"
 
 [menu]
   [[menu.main]]

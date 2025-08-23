@@ -40,6 +40,10 @@ enableRobotsTXT = true
   name = "x"
   url = "https://x.com/naskovai"
 
+[[params.socialIcons]]
+  name = "substack"
+  url = "https://naskovai.substack.com/"
+
 [menu]
   [[menu.main]]
     identifier = "home"

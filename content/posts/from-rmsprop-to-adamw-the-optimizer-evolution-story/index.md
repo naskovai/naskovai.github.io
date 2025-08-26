@@ -75,13 +75,13 @@ $\quad v_t \text{ stays small} \rightarrow \frac{\eta}{\sqrt{v_t + \epsilon}} \t
 
 **Dynamic adaptation**: As gradient patterns change during training, $v_t$ automatically adjusts
 
-![Loss curve comparison showing SGD vs RMSProp training from identical initialization, demonstrating RMSProp's faster and more stable convergence](images/F2_loss_vs_steps_linear.png)
+{{< figure src="images/sgd_rmsprop_loss_steps.png" caption="**Figure 1**: Loss curve comparison showing SGD vs RMSProp training from identical initialization, demonstrating RMSProp's faster and more stable convergence" >}}
 
 ### Why This Matters for LLMs
 
 RMSProp enabled stable training of networks with heterogeneous parameter types for the first time. Without it, you couldn't effectively train large networks with both embeddings and deep layers using a single learning rate schedule.
 
-![Step size analysis comparing SGD vs RMSProp across parameter types](images/F1_optimizer_contours_tuned.png)
+{{< figure src="images/sgd_rmsprop_3_params.png" caption="**Figure 2**: Step size analysis comparing SGD (fixed learning rates) vs RMSProp (adaptive learning rates) across three parameter types, showing how RMSProp equalizes effective learning rates while SGD creates wildly varying step sizes" >}}
 
 ---
 
@@ -202,40 +202,23 @@ At each step $t$:
 
 **5.1 Geometry: 2D Contour with Trajectories**
 
-![Optimizer trajectories in 2D contour showing how each optimizer moves in the valley](images/F1_optimizer_contours_tuned.png)
-
-Shows how each optimizer moves in the valley:
-- SGD zig-zags in steep direction
-- RMSProp adapts step sizes but jitters
-- Adam is smoothest
+{{< figure src="images/F1_optimizer_contours_tuned.png" caption="**Figure 3**: Optimizer trajectories in 2D contour showing how each optimizer moves in the valley: SGD zig-zags in steep direction, RMSProp adapts step sizes but jitters, Adam is smoothest" >}}
 
 **5.2 Loss vs Steps (linear scale)**
 
-![Loss vs steps on linear scale](images/F2_loss_vs_steps_linear.png)
-
-- SGD drops quickly but oscillates
-- RMSProp appears fast, jitter less obvious here
-- Adam smooth and steady
+{{< figure src="images/F2_loss_vs_steps_linear.png" caption="**Figure 4**: Loss vs steps on linear scale: SGD drops quickly but oscillates, RMSProp appears fast with jitter less obvious here, Adam smooth and steady" >}}
 
 **5.3 Loss vs Steps (log scale)**
 
-![Loss vs steps on log scale showing residual oscillations](images/F3_loss_vs_steps_log.png)
-
-Residual oscillations exposed, especially after the **regime shift** (dashed line at halfway).
+{{< figure src="images/F3_loss_vs_steps_log.png" caption="**Figure 5**: Loss vs steps on log scale showing residual oscillations exposed, especially after the regime shift (dashed line at halfway)" >}}
 
 **5.4 Zoomed Tail (last 100 steps)**
 
-![Zoomed view of last 100 training steps](images/F4_loss_vs_steps_tail100.png)
-
-- RMSProp jitter stands out compared to Adam's smooth curve
-- Dashed lines = moving averages
+{{< figure src="images/F4_loss_vs_steps_tail100.png" caption="**Figure 6**: Zoomed view of last 100 training steps: RMSProp jitter stands out compared to Adam's smooth curve (dashed lines = moving averages)" >}}
 
 **5.5 Per-parameter Loss Contributions**
 
-![Per-parameter loss contributions showing jitter sources](images/F5_loss_parts_tail.png)
-
-- Confirms jitter mainly from noisy $p_1$ and shifted $p_2$
-- Adam damps both better
+{{< figure src="images/F5_loss_parts_tail.png" caption="**Figure 7**: Per-parameter loss contributions showing jitter sources: confirms jitter mainly from noisy $p_1$ and shifted $p_2$, Adam damps both better" >}}
 
 **✅ Takeaways**
 - **Curvature weights $w$** define the loss geometry
@@ -357,7 +340,7 @@ $\quad$ **Sparse**: Bursty features (95% zeros, else $N(0, 1^2)$) - mimics rare 
 
 **1. Decay Coefficient (The Multiplier)**
 
-![Decay coefficient comparison by feature group showing AdamW's uniform vs Adam+L2's inconsistent coefficients](images/adamw_vs_l2_coefficient_modern.png)
+{{< figure src="images/adamw_vs_l2_coefficient_modern.png" caption="**Figure 8**: Decay coefficient comparison by feature group showing AdamW's uniform vs Adam+L2's inconsistent coefficients" >}}
 
 This figure shows the **effective fraction of current weight** that gets subtracted each step:
 
@@ -369,7 +352,7 @@ AdamW creates a flat line across all groups - the same coefficient everywhere. A
 
 **2. Decay Amount (The Actual Subtraction)**
 
-![Decay amount comparison by feature group showing actual weight reduction applied](images/adamw_vs_l2_amount_modern.png) 
+{{< figure src="images/adamw_vs_l2_amount_modern.png" caption="**Figure 9**: Decay amount comparison by feature group showing actual weight reduction applied" >}}
 
 This figure shows the **actual L2 norm of weight reduction** applied each step:
 

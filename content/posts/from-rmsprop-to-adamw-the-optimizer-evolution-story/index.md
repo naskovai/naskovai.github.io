@@ -1,7 +1,7 @@
 ---
 title: "From RMSProp to AdamW: The Optimizer Evolution Story"
 description: "Tracing the evolution of modern neural network optimizers through the lens of what each was designed to fix: gradient scale heterogeneity, mini-batch noise, and regularization interference."
-date: 2025-08-26T08:00:00-07:00
+date: 2025-08-25T08:00:00-07:00
 tags: ["optimization", "neural networks", "machine learning", "deep learning", "adam", "rmsprop", "adamw", "gradient descent"]
 categories: ["Machine Learning"]
 math: true
@@ -75,13 +75,13 @@ $\quad v_t \text{ stays small} \rightarrow \frac{\eta}{\sqrt{v_t + \epsilon}} \t
 
 **Dynamic adaptation**: As gradient patterns change during training, $v_t$ automatically adjusts
 
-![Loss curve comparison showing SGD vs RMSProp training from identical initialization, demonstrating RMSProp's faster and more stable convergence](/images/rmsprop-adamw-evolution/F2_loss_vs_steps_linear.png)
+![Loss curve comparison showing SGD vs RMSProp training from identical initialization, demonstrating RMSProp's faster and more stable convergence](images/F2_loss_vs_steps_linear.png)
 
 ### Why This Matters for LLMs
 
 RMSProp enabled stable training of networks with heterogeneous parameter types for the first time. Without it, you couldn't effectively train large networks with both embeddings and deep layers using a single learning rate schedule.
 
-![Step size analysis comparing SGD vs RMSProp across parameter types](/images/rmsprop-adamw-evolution/F1_optimizer_contours_tuned.png)
+![Step size analysis comparing SGD vs RMSProp across parameter types](images/F1_optimizer_contours_tuned.png)
 
 ---
 
@@ -202,7 +202,7 @@ At each step $t$:
 
 **5.1 Geometry: 2D Contour with Trajectories**
 
-![Optimizer trajectories in 2D contour showing how each optimizer moves in the valley](/images/rmsprop-adamw-evolution/F1_optimizer_contours_tuned.png)
+![Optimizer trajectories in 2D contour showing how each optimizer moves in the valley](images/F1_optimizer_contours_tuned.png)
 
 Shows how each optimizer moves in the valley:
 - SGD zig-zags in steep direction
@@ -211,7 +211,7 @@ Shows how each optimizer moves in the valley:
 
 **5.2 Loss vs Steps (linear scale)**
 
-![Loss vs steps on linear scale](/images/rmsprop-adamw-evolution/F2_loss_vs_steps_linear.png)
+![Loss vs steps on linear scale](images/F2_loss_vs_steps_linear.png)
 
 - SGD drops quickly but oscillates
 - RMSProp appears fast, jitter less obvious here
@@ -219,20 +219,20 @@ Shows how each optimizer moves in the valley:
 
 **5.3 Loss vs Steps (log scale)**
 
-![Loss vs steps on log scale showing residual oscillations](/images/rmsprop-adamw-evolution/F3_loss_vs_steps_log.png)
+![Loss vs steps on log scale showing residual oscillations](images/F3_loss_vs_steps_log.png)
 
 Residual oscillations exposed, especially after the **regime shift** (dashed line at halfway).
 
 **5.4 Zoomed Tail (last 100 steps)**
 
-![Zoomed view of last 100 training steps](/images/rmsprop-adamw-evolution/F4_loss_vs_steps_tail100.png)
+![Zoomed view of last 100 training steps](images/F4_loss_vs_steps_tail100.png)
 
 - RMSProp jitter stands out compared to Adam's smooth curve
 - Dashed lines = moving averages
 
 **5.5 Per-parameter Loss Contributions**
 
-![Per-parameter loss contributions showing jitter sources](/images/rmsprop-adamw-evolution/F5_loss_parts_tail.png)
+![Per-parameter loss contributions showing jitter sources](images/F5_loss_parts_tail.png)
 
 - Confirms jitter mainly from noisy $p_1$ and shifted $p_2$
 - Adam damps both better
@@ -357,7 +357,7 @@ $\quad$ **Sparse**: Bursty features (95% zeros, else $N(0, 1^2)$) - mimics rare 
 
 **1. Decay Coefficient (The Multiplier)**
 
-![Decay coefficient comparison by feature group showing AdamW's uniform vs Adam+L2's inconsistent coefficients](/images/rmsprop-adamw-evolution/adamw_vs_l2_coefficient_modern.png)
+![Decay coefficient comparison by feature group showing AdamW's uniform vs Adam+L2's inconsistent coefficients](images/adamw_vs_l2_coefficient_modern.png)
 
 This figure shows the **effective fraction of current weight** that gets subtracted each step:
 
@@ -369,7 +369,7 @@ AdamW creates a flat line across all groups - the same coefficient everywhere. A
 
 **2. Decay Amount (The Actual Subtraction)**
 
-![Decay amount comparison by feature group showing actual weight reduction applied](/images/rmsprop-adamw-evolution/adamw_vs_l2_amount_modern.png) 
+![Decay amount comparison by feature group showing actual weight reduction applied](images/adamw_vs_l2_amount_modern.png) 
 
 This figure shows the **actual L2 norm of weight reduction** applied each step:
 

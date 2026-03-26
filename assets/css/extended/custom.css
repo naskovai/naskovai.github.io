@@ -1,3 +1,8 @@
+/* Scale down code/pre to match body text visually */
+code, pre, .highlight {
+    font-size: 0.875em;
+}
+
 /* Fix the homeInfoParams fixed height issue */
 .first-entry.home-info {
     min-height: auto !important;

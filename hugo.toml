@@ -68,4 +68,9 @@ enableRobotsTXT = true
     guessSyntax = true
     lineNos = true
     style = "github"
+  [markup.goldmark.extensions.passthrough]
+    enable = true
+    [markup.goldmark.extensions.passthrough.delimiters]
+      block = [["$$", "$$"]]
+      inline = [["$", "$"]]
 

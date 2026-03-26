@@ -2,7 +2,6 @@
 title: "From RMSProp to AdamW: The Optimizer Evolution Story"
 description: "Tracing the evolution of modern neural network optimizers through the lens of what each was designed to fix: gradient scale heterogeneity, mini-batch noise, and regularization interference."
 date: 2025-08-25T08:00:00-07:00
-tags: ["optimization", "neural networks", "machine learning", "deep learning", "adam", "rmsprop", "adamw", "gradient descent"]
 categories: ["Machine Learning"]
 math: true
 draft: false

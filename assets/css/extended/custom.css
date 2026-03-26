@@ -64,6 +64,8 @@
     .toc.side.toc-open {
         display: block;
         position: fixed;
+        bottom: 8rem;
+        right: 1.5rem;
         width: min(20rem, 90vw);
         max-height: 60vh;
         overflow-y: auto;

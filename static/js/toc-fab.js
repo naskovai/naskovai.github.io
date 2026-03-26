@@ -20,9 +20,10 @@
 
         if (topLink) {
             // Insert container where top-link was, then pull top-link into it
+            // Order: topLink first (visually on top), fab below it
             topLink.parentNode.insertBefore(container, topLink);
-            container.appendChild(fab);
             container.appendChild(topLink);
+            container.appendChild(fab);
         } else {
             container.appendChild(fab);
             document.body.appendChild(container);

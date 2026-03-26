@@ -2,6 +2,7 @@
 :root {
     --main-width: clamp(720px, 60vw, 900px);
     --post-width: clamp(720px, 60vw, 900px);
+    --nav-width: clamp(720px, 60vw, 900px);
 }
 
 /* On screens where left TOC is visible, nudge post right for breathing room */
@@ -9,11 +10,6 @@
     .post-header,
     .post-content {
         padding-left: 3rem;
-    }
-
-    /* Stretch site nav to align with TOC left edge and mirror on the right */
-    .nav {
-        max-width: calc(100vw - 2rem);
     }
 }
 
@@ -40,8 +36,8 @@
     width: 2.75rem;
     height: 2.75rem;
     border-radius: 50%;
-    background: var(--primary);
-    color: var(--theme);
+    background: var(--tertiary-bg);
+    color: var(--secondary);
     border: none;
     cursor: pointer;
     display: flex;

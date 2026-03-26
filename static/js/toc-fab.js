@@ -58,6 +58,16 @@
         toc.querySelectorAll('a').forEach(function (a) {
             a.addEventListener('click', close);
         });
+
+        // Auto-scroll the TOC to keep the active link visible
+        var tocInner = toc.querySelector('.inner') || toc;
+        new MutationObserver(function (mutations) {
+            mutations.forEach(function (m) {
+                if (m.target.classList.contains('active')) {
+                    m.target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            });
+        }).observe(tocInner, { subtree: true, attributes: true, attributeFilter: ['class'] });
     }
 
     if (document.readyState === 'loading') {

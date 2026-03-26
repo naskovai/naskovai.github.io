@@ -395,3 +395,24 @@ This isn't just about mathematical elegance - each evolution addressed real prob
 - **AdamW**: Made regularization work properly at scale
 
 The key insight is that optimization algorithm development is fundamentally **empirical** and **co-evolutionary** with model architecture development. Each breakthrough emerged from trying to solve concrete training problems, not from abstract mathematical principles.
+
+---
+
+## References
+
+- [Lecture 6e — rmsprop: Divide the gradient by a running average of its recent magnitude](https://www.cs.toronto.edu/~tijmen/csc321/slides/lecture_slides_lec6.pdf) — Tieleman & Hinton, 2012. The original RMSProp slide deck from Hinton's Coursera course.
+- [Adam: A Method for Stochastic Optimization](https://arxiv.org/abs/1412.6980) — Kingma & Ba, 2014. The Adam paper.
+- [Decoupled Weight Decay Regularization](https://arxiv.org/abs/1711.05101) — Loshchilov & Hutter, 2017. The AdamW paper; shows why L2 and weight decay are not equivalent under Adam.
+
+---
+
+## Citation
+
+```bibtex
+@misc{naskovai2025optimizers,
+  author = {naskovai},
+  title  = {From RMSProp to AdamW: The Optimizer Evolution Story},
+  year   = {2025},
+  url    = {https://naskovai.github.io/posts/from-rmsprop-to-adamw-the-optimizer-evolution-story/}
+}
+```

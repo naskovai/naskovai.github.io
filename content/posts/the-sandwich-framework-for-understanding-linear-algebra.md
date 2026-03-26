@@ -376,3 +376,23 @@ Before diving in, let's clarify a crucial distinction:
 **Key insight**: The translate step (rightmost) may be orthogonal (rotation) or general (potentially distorting).
 
 The magic is that this **same pattern** explains eigendecomposition, SVD, projections, least squares, whitening, and more. The differences are just in *which* coordinate systems are natural and *what* simple operation happens there.
+
+---
+
+## References
+
+- [Introduction to Linear Algebra](https://math.mit.edu/~gs/linearalgebra/) — Gilbert Strang. The canonical textbook; Chapter 6 (eigenvalues) and Chapter 7 (SVD) map directly onto the sandwich framework.
+- [Matrix Computations](https://jhupbooks.press.jhu.edu/title/matrix-computations) — Golub & Van Loan. The reference for numerical aspects of decompositions.
+
+---
+
+## Citation
+
+```bibtex
+@misc{naskovai2025sandwich,
+  author = {naskovai},
+  title  = {The Sandwich Framework for Understanding Linear Algebra},
+  year   = {2025},
+  url    = {https://naskovai.github.io/posts/the-sandwich-framework-for-understanding-linear-algebra/}
+}
+```

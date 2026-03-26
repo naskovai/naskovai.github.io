@@ -1393,17 +1393,13 @@ Decoder-only is the simpler default. Autoregressive decoding already gives you i
 
 **Transformer architecture for recommendations**
 - [Actions Speak Louder than Words: Trillion-Parameter Sequential Transducers for Generative Recommendations](https://arxiv.org/abs/2402.17152) — Zhai et al., Meta 2024. Introduces HSTU, M-FALCON, and the full Meta generative rec system.
-- [HSTU follow-up / ULTRA-HSTU](https://arxiv.org/abs/2408.12516) — Meta 2024. Scaling HSTU to longer sequences with semi-local attention.
 
 **Production systems**
-- [OneRec: Unifying Retrieve and Rank with Generative Recommender and Iterative Preference Alignment](https://arxiv.org/abs/2501.18893) — Kuaishou 2025. Full generative system in production; introduces multi-pathway compression and ECPO alignment.
-- [PinFM: Scaling Foundation Models for Pinterest Recommendations](https://arxiv.org/abs/2406.02795) — Pinterest 2024. Hybrid pretrain-then-finetune approach; shows transfer to production DLRM.
+- [OneRec: Unifying Retrieve and Rank with Generative Recommender and Iterative Preference Alignment](https://arxiv.org/abs/2502.18965) — Kuaishou 2025. Full generative system in production; introduces multi-pathway compression and ECPO alignment.
+- [PinFM: Foundation Model for User Activity Sequences at a Billion-scale Visual Discovery Platform](https://arxiv.org/abs/2507.12704) — Pinterest 2025. Hybrid pretrain-then-finetune approach; shows transfer to production DLRM.
 
 **Alignment**
 - [Direct Preference Optimization](https://arxiv.org/abs/2305.18290) — Rafailov et al., 2023. The DPO paper that recommendation alignment methods adapt from.
-
-**List generation**
-- [GRACE: Generative Recommendation via Content-based Autoregressive List Completion](https://arxiv.org/abs/2405.02566) — 2024. Encoder-decoder approach to autoregressive list generation.
 
 ---
 

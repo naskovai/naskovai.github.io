@@ -44,11 +44,10 @@
     align-items: center;
     justify-content: center;
     box-shadow: 0 0.125rem 0.75rem rgba(0, 0, 0, 0.3);
-    transition: transform 0.15s ease;
 }
 
 .toc-fab:hover {
-    transform: scale(1.1);
+    color: var(--link-hover-color);
 }
 
 /* Mobile FAB TOC — hide inline side TOC, show as overlay */

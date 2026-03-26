@@ -25,8 +25,9 @@ enableRobotsTXT = true
   comments = false
   hidemeta = false
   hideSummary = false
-  showtoc = false
-  tocopen = false
+  ShowToc = true
+  TocSide = "left"
+  TocOpen = false
 
 [params.homeInfoParams]
   Title = "Welcome to @naskovai's blog"

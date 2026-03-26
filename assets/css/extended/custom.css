@@ -4,6 +4,78 @@
     --post-width: clamp(720px, 60vw, 900px);
 }
 
+/* On screens where left TOC is visible, nudge post body right for breathing room */
+@media screen and (min-width: 1350px) {
+    .post-content {
+        padding-left: 3rem;
+    }
+}
+
+/* Mobile FAB TOC — hide inline side TOC, show as overlay via FAB button */
+@media screen and (max-width: 1349px) {
+    .toc.side {
+        display: none;
+    }
+
+    .toc.side.toc-open {
+        display: block;
+        position: fixed;
+        bottom: 5rem;
+        right: 1.5rem;
+        width: min(20rem, 90vw);
+        max-height: 60vh;
+        overflow-y: auto;
+        z-index: 99;
+        background: var(--theme);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: 0 0.25rem 1.5rem rgba(0, 0, 0, 0.2);
+        padding: 0.5rem;
+    }
+
+    .toc-fab {
+        position: fixed;
+        bottom: 1.5rem;
+        right: 1.5rem;
+        width: 3rem;
+        height: 3rem;
+        border-radius: 50%;
+        background: var(--primary);
+        color: var(--theme);
+        border: none;
+        cursor: pointer;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0.125rem 0.75rem rgba(0, 0, 0, 0.3);
+        transition: transform 0.15s ease;
+    }
+
+    .toc-fab:hover {
+        transform: scale(1.1);
+    }
+
+    .toc-backdrop {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 98;
+        background: rgba(0, 0, 0, 0.25);
+    }
+
+    .toc-backdrop.toc-backdrop-active {
+        display: block;
+    }
+}
+
+/* Hide FAB on large screens where sidebar TOC is visible */
+@media screen and (min-width: 1350px) {
+    .toc-fab {
+        display: none;
+    }
+}
+
 /* Scale down code/pre to match body text visually */
 code, pre, .highlight {
     font-size: 0.875em;

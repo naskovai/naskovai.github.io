@@ -1,3 +1,7 @@
+{{ if or (.Param "ShowToc") .Site.Params.ShowToc }}
+<script defer src="/js/toc-fab.js"></script>
+{{ end }}
+
 {{ if or .Params.math .Site.Params.math }}
 {{ partial "math.html" . }}
 {{ end }}

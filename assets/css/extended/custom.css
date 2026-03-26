@@ -95,6 +95,7 @@
 /* Scale down code/pre to match body text visually */
 code, pre, .highlight {
     font-size: 0.875em;
+    line-height: 1.5;
 }
 
 /* Fix the homeInfoParams fixed height issue */

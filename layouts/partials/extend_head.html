@@ -2,7 +2,6 @@
 <script defer src="/js/toc-fab.js"></script>
 {{ end }}
 
-{{ if findRE "```mermaid" .RawContent }}
 <script type="module">
   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
 
@@ -20,23 +19,26 @@
   }
 
   document.addEventListener('DOMContentLoaded', function () {
-    // Convert code blocks to mermaid divs, storing source for re-renders
-    document.querySelectorAll('code.language-mermaid').forEach(function (el) {
-      const pre = el.parentElement;
+    const blocks = document.querySelectorAll('code.language-mermaid');
+    if (!blocks.length) return;
+
+    blocks.forEach(function (el) {
+      const source = el.textContent;
       const div = document.createElement('div');
       div.className = 'mermaid';
-      div.setAttribute('data-source', el.textContent);
-      div.textContent = el.textContent;
-      pre.parentElement.replaceChild(div, pre);
+      div.setAttribute('data-source', source);
+      div.textContent = source;
+      // Walk up to the .highlight wrapper (Hugo wraps code in table when lineNos=true)
+      const wrapper = el.closest('.highlight') || el.parentElement;
+      wrapper.parentElement.replaceChild(div, wrapper);
     });
+
     renderAll();
 
-    // Re-render when theme toggles (PaperModX toggles .dark on body)
     new MutationObserver(renderAll)
       .observe(document.body, { attributes: true, attributeFilter: ['class'] });
   });
 </script>
-{{ end }}
 
 {{ if or .Params.math .Site.Params.math }}
 {{ partial "math.html" . }}

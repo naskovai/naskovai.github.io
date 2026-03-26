@@ -1288,26 +1288,26 @@ Despite the "unify everything" pitch, production systems still use a cascade. Th
 
 ```mermaid
 flowchart TD
-    A([User opens app]) -->|request| B
+    A([User opens app]) --> B1 & B2
 
-    subgraph B["RETRIEVAL · tens of ms · GPU or CPU"]
-        B1["Option A: Autoregressive Semantic ID generation\nbeam search · constrained by trie"]
-        B2["Option B: ANN on pretrained embeddings\ntwo-tower with better embeddings"]
+    subgraph RET["RETRIEVAL · tens of ms · GPU or CPU"]
+        B1["Option A: Autoregressive Semantic ID gen\nbeam search · constrained by trie"]
+        B2["Option B: ANN on pretrained embeddings\ntwo-tower · better embeddings"]
     end
 
-    B -->|"~1000 candidates"| C
+    B1 & B2 -->|"~1,000 candidates"| C1
 
-    subgraph C["RANKING · tens of ms · GPU"]
-        C1["HSTU processes user history once · KV cache shared\nM-FALCON scores all candidates in microbatches\nOutputs P(action) per candidate"]
+    subgraph RANK["RANKING · tens of ms · GPU"]
+        C1["HSTU processes user history once\nKV cache shared across all candidates\nM-FALCON scores candidates in microbatches\nOutputs P(action) per candidate"]
     end
 
-    C -->|"~100 scored candidates"| D
+    C1 -->|"~100 scored candidates"| D1
 
-    subgraph D["RERANKING / POLICY · single-digit ms · GPU or CPU"]
-        D1["Diversity · business rules · ad mixing\nOR autoregressive list generation"]
+    subgraph RERANK["RERANKING / POLICY · single-digit ms · GPU or CPU"]
+        D1["Diversity enforcement · business rules · ad mixing\nOR autoregressive list generation"]
     end
 
-    D -->|"~10–30 items"| E([User sees feed])
+    D1 -->|"~10–30 items"| E([User sees feed])
 ```
 
 ### Where the KV cache lives

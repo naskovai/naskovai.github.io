@@ -1286,39 +1286,28 @@ An interviewer asking "how would you serve this?" wants to know you understand t
 
 Despite the "unify everything" pitch, production systems still use a cascade. The stages are the same as classic DLRM pipelines; what changes is *what runs inside each stage*:
 
-```
-User opens app
-    │
-    ▼
-┌─────────────────────────────────────────────────────┐
-│ RETRIEVAL (tens of ms)                              │
-│  Option A: Autoregressive Semantic ID generation    │
-│    → beam search, constrained by trie               │
-│    → produces ~1000 candidate Semantic IDs           │
-│  Option B: ANN search on pretrained embeddings      │
-│    → standard two-tower, but with better embeddings │
-│  Runs on: GPU (if autoregressive) or CPU (if ANN)   │
-└─────────────┬───────────────────────────────────────┘
-              │ ~1000 candidates
-              ▼
-┌─────────────────────────────────────────────────────┐
-│ RANKING (tens of ms)                                │
-│  HSTU processes user history once (KV cache)        │
-│  M-FALCON scores all candidates in microbatches     │
-│  Predicts P(action) per candidate                   │
-│  Runs on: GPU (attention is the bottleneck)         │
-└─────────────┬───────────────────────────────────────┘
-              │ ~100 scored candidates
-              ▼
-┌─────────────────────────────────────────────────────┐
-│ RERANKING / POLICY (single-digit ms)                │
-│  Diversity enforcement, business rules, ad mixing   │
-│  OR: autoregressive list generation (Section 9)     │
-│  Runs on: GPU (if autoregressive) or CPU (if rules) │
-└─────────────┬───────────────────────────────────────┘
-              │ ~10-30 items
-              ▼
-         User sees feed
+```mermaid
+flowchart TD
+    A([User opens app]) -->|request| B
+
+    subgraph B["RETRIEVAL · tens of ms · GPU or CPU"]
+        B1["Option A: Autoregressive Semantic ID generation\nbeam search · constrained by trie"]
+        B2["Option B: ANN on pretrained embeddings\ntwo-tower with better embeddings"]
+    end
+
+    B -->|"~1000 candidates"| C
+
+    subgraph C["RANKING · tens of ms · GPU"]
+        C1["HSTU processes user history once · KV cache shared\nM-FALCON scores all candidates in microbatches\nOutputs P(action) per candidate"]
+    end
+
+    C -->|"~100 scored candidates"| D
+
+    subgraph D["RERANKING / POLICY · single-digit ms · GPU or CPU"]
+        D1["Diversity · business rules · ad mixing\nOR autoregressive list generation"]
+    end
+
+    D -->|"~10–30 items"| E([User sees feed])
 ```
 
 ### Where the KV cache lives

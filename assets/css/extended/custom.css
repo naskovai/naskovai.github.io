@@ -92,6 +92,18 @@
     }
 }
 
+/* Mermaid diagrams: responsive and centered */
+.mermaid {
+    display: flex;
+    justify-content: center;
+    margin: 1.5rem 0;
+}
+
+.mermaid svg {
+    max-width: 100%;
+    height: auto;
+}
+
 /* Scale down code/pre to match body text visually */
 code, pre, .highlight {
     font-size: 0.875em;

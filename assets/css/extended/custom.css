@@ -4,14 +4,53 @@
     --post-width: clamp(720px, 60vw, 900px);
 }
 
-/* On screens where left TOC is visible, nudge post body right for breathing room */
+/* On screens where left TOC is visible, nudge post right for breathing room */
 @media screen and (min-width: 1350px) {
+    .post-header,
     .post-content {
         padding-left: 3rem;
     }
 }
 
-/* Mobile FAB TOC — hide inline side TOC, show as overlay via FAB button */
+/* Button group: TOC FAB + scroll-to-top stacked via flexbox */
+.nav-fab-group {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Reset top-link positioning — now managed by the flex container */
+.nav-fab-group .top-link {
+    position: static !important;
+    bottom: auto !important;
+    right: auto !important;
+}
+
+.toc-fab {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    background: var(--primary);
+    color: var(--theme);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0.125rem 0.75rem rgba(0, 0, 0, 0.3);
+    transition: transform 0.15s ease;
+}
+
+.toc-fab:hover {
+    transform: scale(1.1);
+}
+
+/* Mobile FAB TOC — hide inline side TOC, show as overlay */
 @media screen and (max-width: 1349px) {
     .toc.side {
         display: none;
@@ -20,7 +59,7 @@
     .toc.side.toc-open {
         display: block;
         position: fixed;
-        bottom: 5rem;
+        bottom: 8rem;
         right: 1.5rem;
         width: min(20rem, 90vw);
         max-height: 60vh;
@@ -31,29 +70,6 @@
         border-radius: var(--radius);
         box-shadow: 0 0.25rem 1.5rem rgba(0, 0, 0, 0.2);
         padding: 0.5rem;
-    }
-
-    .toc-fab {
-        position: fixed;
-        bottom: 1.5rem;
-        right: 1.5rem;
-        width: 3rem;
-        height: 3rem;
-        border-radius: 50%;
-        background: var(--primary);
-        color: var(--theme);
-        border: none;
-        cursor: pointer;
-        z-index: 100;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 0.125rem 0.75rem rgba(0, 0, 0, 0.3);
-        transition: transform 0.15s ease;
-    }
-
-    .toc-fab:hover {
-        transform: scale(1.1);
     }
 
     .toc-backdrop {

@@ -1382,3 +1382,40 @@ Semantic IDs solve this partially. A new item with Semantic ID (42, 8, 3, 215) s
 
 **Q: Encoder-decoder or decoder-only for list generation?**
 Decoder-only is the simpler default. Autoregressive decoding already gives you interdependent list generation (each item conditioned on previously generated items). OneRec v2 proved this by dropping the encoder. Constrained decoding on pre-retrieved candidates gives you diversity within a fixed candidate set. Encoder-decoder buys you bidirectional history encoding (richer user representation) at the cost of cross-attention overhead at every decoder layer. Most teams should start decoder-only. → Section 9
+
+---
+
+## References
+
+**Semantic IDs and item tokenization**
+- [TIGER: Generative Retrieval via Semantic Identifiers](https://arxiv.org/abs/2305.05065) — Rajput et al., 2023. Introduced Semantic IDs using RQ-VAE for generative retrieval.
+- [RQ-VAE](https://arxiv.org/abs/2203.01941) — Lee et al., CVPR 2022. The original residual-quantization VAE for image generation that TIGER borrowed.
+
+**Transformer architecture for recommendations**
+- [Actions Speak Louder than Words: Trillion-Parameter Sequential Transducers for Generative Recommendations](https://arxiv.org/abs/2402.17152) — Zhai et al., Meta 2024. Introduces HSTU, M-FALCON, and the full Meta generative rec system.
+- [HSTU follow-up / ULTRA-HSTU](https://arxiv.org/abs/2408.12516) — Meta 2024. Scaling HSTU to longer sequences with semi-local attention.
+
+**Production systems**
+- [OneRec: Unifying Retrieve and Rank with Generative Recommender and Iterative Preference Alignment](https://arxiv.org/abs/2501.18893) — Kuaishou 2025. Full generative system in production; introduces multi-pathway compression and ECPO alignment.
+- [PinFM: Scaling Foundation Models for Pinterest Recommendations](https://arxiv.org/abs/2406.02795) — Pinterest 2024. Hybrid pretrain-then-finetune approach; shows transfer to production DLRM.
+
+**Alignment**
+- [Direct Preference Optimization](https://arxiv.org/abs/2305.18290) — Rafailov et al., 2023. The DPO paper that recommendation alignment methods adapt from.
+
+**List generation**
+- [GRACE: Generative Recommendation via Content-based Autoregressive List Completion](https://arxiv.org/abs/2405.02566) — 2024. Encoder-decoder approach to autoregressive list generation.
+
+---
+
+## Citation
+
+If you found this post useful, you can cite it as:
+
+```bibtex
+@misc{naskovai2025genrecsys,
+  author = {naskovai},
+  title  = {Generative Recommendations: A Mechanistic Guide},
+  year   = {2025},
+  url    = {https://naskovai.github.io/posts/generative-recsys-overview/}
+}
+```

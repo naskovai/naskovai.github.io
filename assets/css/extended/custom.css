@@ -10,6 +10,11 @@
     .post-content {
         padding-left: 3rem;
     }
+
+    /* Stretch site nav to align with TOC left edge and mirror on the right */
+    .nav {
+        max-width: calc(100vw - 2rem);
+    }
 }
 
 /* Button group: TOC FAB + scroll-to-top stacked via flexbox */
@@ -59,8 +64,6 @@
     .toc.side.toc-open {
         display: block;
         position: fixed;
-        bottom: 8rem;
-        right: 1.5rem;
         width: min(20rem, 90vw);
         max-height: 60vh;
         overflow-y: auto;

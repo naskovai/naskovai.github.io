@@ -1,5 +1,11 @@
-# Generative Recommendations: A Mechanistic Guide
-
+---
+title: "Generative Recommendations: A Mechanistic Guide"
+description: "A mechanistic deep dive into how generative recommender systems work: from Semantic IDs and RQ-VAE to HSTU, M-FALCON, and production deployment at Meta, Kuaishou, and beyond."
+date: 2026-03-25T08:00:00-07:00
+tags: ["recommendation systems", "generative AI", "machine learning", "deep learning", "transformers", "semantic IDs"]
+categories: ["Machine Learning"]
+math: true
+draft: false
 ---
 
 ## 1. The Broken Foundation

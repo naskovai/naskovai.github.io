@@ -77,6 +77,12 @@ log_probs = logits - log(sum(exp(logits), dim=-1, keepdim=True))  # log-softmax
 loss = -mean(log_probs[:, 0])                                     # scalar
 ```
 
+> **InfoNCE, sampled softmax, and the contrastive loss Shopify describes are all the same computation.** The standard InfoNCE formula is:
+> $$\mathcal{L} = -\log \frac{\exp(\text{sim}(q, k^+))}{\exp(\text{sim}(q, k^+)) + \sum_{i} \exp(\text{sim}(q, k_i^-))}$$
+> Rearranging the log of the fraction:
+> $$= -\,\text{sim}(q, k^+) + \log\!\left(\sum_{j} \exp(\text{sim}(q, k_j))\right)$$
+> That is `-(logits[0] - log(sum(exp(logits))))`, which is `-log_probs[0]`. Identical to the code above.
+
 This is mathematically a contrastive loss at every position. That's what Shopify's NeurIPS abstract means by "contrastive learning with hard negative sampling." But unlike a two-tower setup, there's a single model with a causal mask, and every position produces a training signal. The quality of the K sampled negatives directly controls how sharp the learned boundaries are (Lesson 2).
 
 **Step 4: Serving. Last position → ANN search.** At inference, the buyer's sequence is processed once. The hidden state at the last position is the user representation. Score it against all products via approximate nearest neighbor search.

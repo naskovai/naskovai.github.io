@@ -1,6 +1,6 @@
 ---
 title: "Negative Sampling for Embedding-Based Retrieval: An Overview"
-description: "How production retrieval systems learn to rank a billion items — tracing the evolution of negative sampling from random batches through hard mining, bias correction, and ANCE."
+description: "How production retrieval systems learn to rank a billion items, tracing the evolution of negative sampling from random batches through hard mining, bias correction, and ANCE."
 date: 2026-03-26T08:00:00-07:00
 categories: ["Machine Learning"]
 math: true

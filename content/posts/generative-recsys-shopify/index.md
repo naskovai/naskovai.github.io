@@ -25,7 +25,7 @@ Shopify is running on atomic product IDs, not Semantic IDs. Their engineering bl
 
 **Step 1: Build the input sequence.** Each event in the buyer's history becomes a dense vector from learned embedding tables. These are randomly initialized and trained with the model, the same way token embeddings work in an LLM. No pre-computed content features enter the model. The product's title, images, and metadata don't appear. The embedding for product #48201 starts as random noise and learns its meaning purely from how buyers interact with it across millions of sequences.
 
-```
+```python
 # Learned tables (randomly initialized, trained end-to-end with the model):
 product_emb_table                                     # float32[num_products, d_model]  e.g. [5M, 256]
 action_emb_table                                      # float32[num_actions, d_model]   e.g. [5, 256]
@@ -41,7 +41,7 @@ X                                                      # float32[n, d_model]
 
 **Step 2: HSTU processes the sequence with causal attention.** Each position can see all previous positions but not future ones. The attention block uses pointwise SiLU (not softmax), RoPE on timestamps (Lesson 1), relative time bias, and gating instead of a feed-forward network. The original guide covers each of these in detail.
 
-```
+```python
 # One HSTU block (stacked L times with residual connections):
 proj = silu(einsum('nd, dh -> nh', X, W_proj))         # float32[n, 4*d_attn]
 Q, K, V, U = split(proj, 4, dim=-1)                    # each: float32[n, d_attn]
@@ -64,7 +64,7 @@ After stacking L layers with residual connections, the output H is `float32[n, d
 
 **Step 3: Training. Every position is a contrastive loss.** This is where the "generative" objective lives. At each position t, the hidden state H[t] is scored via dot product against the true next product's embedding and against K sampled negatives. The loss pushes H[t] closer to the true next product and farther from the negatives. A sequence of 500 events gives 499 such losses.
 
-```
+```python
 H_pred = H[:-1]                                        # float32[n-1, d_model]
 target_embs = product_emb_table[product_ids[1:]]       # float32[n-1, d_model]
 neg_embs = product_emb_table[sample(num_products, K)]  # float32[K, d_model]
@@ -81,7 +81,7 @@ This is mathematically a contrastive loss at every position. That's what Shopify
 
 **Step 4: Serving. Last position → ANN search.** At inference, the buyer's sequence is processed once. The hidden state at the last position is the user representation. Score it against all products via approximate nearest neighbor search.
 
-```
+```python
 user_repr = H[-1]                                      # float32[d_model]
 scores = einsum('d, pd -> p', user_repr, product_emb_table)  # float32[num_products]
 top_k = topk(scores, k=100)                            # approximate via ANN in practice
@@ -127,7 +127,7 @@ So Shopify's architecture choice is: ship HSTU on product IDs, invest engineerin
 
 The original guide describes HSTU's relative attention bias: log-bucketed time gaps added directly to attention scores. The model learns that "events 2 seconds apart are related" and "a month-long gap means a context switch." The mechanism:
 
-```
+```python
 # Positional bias: log-bucketed distance in sequence position
 pos_gap = |position_j - position_i|                      # how many events apart
 pos_bucket = floor(log(max(1, pos_gap)) / 0.301)         # ~25 buckets
@@ -171,7 +171,7 @@ This is a pure rotation: it changes the *direction* of the vector but preserves 
 
 Apply this rotation to the query and key vectors before computing attention:
 
-```
+```python
 q_rotated = R(t_i · ω) · q_i     # rotate query by its timestamp
 k_rotated = R(t_j · ω) · k_j     # rotate key by its timestamp
 ```
@@ -194,7 +194,7 @@ The absolute position information isn't lost. It's encoded in the rotation angle
 
 RoPE handles this by pairing up dimensions of the embedding and assigning each pair a different frequency:
 
-```
+```python
 # d_model = 128 → 64 pairs of dimensions
 # Each pair gets its own frequency
 
@@ -222,7 +222,7 @@ At inference, Shopify injects the *current* session timestamp. That timestamp de
 
 Shopify uses both, and they're complementary. RoPE carries the seasonal signal (absolute calendar position via slow-frequency dimensions). The log-bucketed relative bias carries the recency signal (recent events get a boost regardless of calendar position). Combined:
 
-```
+```python
 scores = dot(R(t_i · ω) · q_i,  R(t_j · ω) · k_j)   # RoPE: absolute + relative
        + time_learned_weights[bucket(|t_j - t_i|)]        # bias: relative only
 weights = silu(scores)
@@ -258,7 +258,7 @@ Shopify describes two problems with naive uniform sampling, and two fixes.
 
 Share a single negative pool across the batch instead of sampling per-example. This expands the effective number of negatives each training example sees without proportionally increasing memory. The implementation is a single matrix multiply:
 
-```
+```python
 # query: float32[batch_size, d_model]     - each position's hidden state
 # positives: float32[batch_size, d_model] - each position's true next product
 # shared_neg: float32[K, d_model]         - shared negative pool
@@ -304,7 +304,7 @@ Concretely, this means two things:
 
 **Treating other models' predictions as hard negatives.** This is the more interesting mechanism. If another retriever in the ensemble confidently predicts item $X$ for a given user, and $X$ is not a ground truth positive, then $X$ is a maximally informative hard negative for the generative model. Why? Because the ensemble already covers that prediction. Even if $X$ were a true positive, the ensemble would find it without the generative model's help. The generative model should learn to *disagree* with the ensemble where the ensemble is wrong, not to *agree* where the ensemble is already right.
 
-```
+```python
 # Conceptual training loop (simplified. In practice, missed items
 # are upweighted rather than exclusive; you still train on some
 # ensemble-covered positives for redundancy)

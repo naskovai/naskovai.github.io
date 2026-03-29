@@ -1,7 +1,7 @@
 ---
 title: "Large ID Embedding Tables in Recommendation Systems"
 description: "Everything that breaks when you put a 450-million-row lookup table at the center of your model, and how the industry fixes it: cardinality, the one-epoch problem, transfer and enrichment, and distributed serving."
-date: 2026-03-29T08:00:00-07:00
+date: 2026-03-29T00:00:00-07:00
 categories: ["Machine Learning"]
 math: true
 draft: false

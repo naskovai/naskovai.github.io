@@ -139,7 +139,7 @@ Best when entities have rich text metadata and you need real-time scene understa
 **Training:**
 
 ```mermaid
-graph LR
+graph TD
     A["Entity text<br/>(name + location)"] --> B["Fine-tuned LLM"]
     B --> C["Last token<br/>hidden state"]
     C --> D["MLP projection"]
@@ -154,7 +154,7 @@ graph LR
 **Inference:**
 
 ```mermaid
-graph LR
+graph TD
     A["Real-time<br/>text features<br/>(up to 10)"] --> B["Frozen LLM<br/>(per feature)"]
     B --> C["10 semantic<br/>vectors"]
     C --> D["Bidirectional<br/>encoder"]
@@ -167,7 +167,7 @@ graph LR
 Best when long-tail entity quality is the bottleneck. A tail entity like "Coding Monkey Pizza" that has few interactions but a similar text description to "Pizza Hut" gets pulled toward Pizza Hut's well-trained collaborative embedding.
 
 ```mermaid
-graph LR
+graph TD
     A["Item IDs in<br/>user sequence"] --> B["ID Embedding<br/>Lookup"]
     B --> C["Collaborative<br/>embedding"]
 
@@ -190,7 +190,7 @@ The masked ID prediction objective (mask some items in the sequence, predict fro
 Best when you want an architecture-agnostic framework that doesn't depend on specific entity types.
 
 ```mermaid
-graph LR
+graph TD
     subgraph "Bidirectional training"
         A["Sparse features<br/>as text narratives<br/>(feature: value)"] --> B["LLM encoder"]
         B --> C["Text<br/>embeddings"]

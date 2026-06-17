@@ -478,7 +478,7 @@ Context-1 uses CISPO (Clipped IS-weight Policy Optimization), introduced in the 
 consequential.
 
 **Notation.** $q$ is the prompt (question), $o_i$ is the $i$-th full response sampled from the policy for that prompt, $o_{i,t}$ is the $t$-th token within that response, and 
-$o_{i,<t}$ is everything generated before it. So $\pi_\theta(o_{i,t} \mid q, o_{i,<t})$ is the policy's probability of the token at position $t$ given the prompt and the 
+$o_{i,\lt t}$ is everything generated before it. So $\pi_\theta(o_{i,t} \mid q, o_{i,\lt t})$ is the policy's probability of the token at position $t$ given the prompt and the 
 prefix so far. A "group" is the set of $G$ responses sampled from a single prompt.
 
 **Importance sampling, briefly.** GRPO collects a batch of rollouts using the old policy $\pi_{\theta_{\text{old}}}$, then runs multiple *gradient substeps* on that same 
@@ -486,7 +486,7 @@ batch before re-rolling out. A substep is one gradient update; "4 substeps per s
 current policy $\pi_\theta$ has already shifted from the policy that generated the rollouts, so substeps 2 onward are off-policy with respect to the rollout distribution. To 
 correct for this drift, token-level updates are reweighted by the *importance sampling ratio*:
 
-$$r_{i,t}(\theta) = \frac{\pi_\theta(o_{i,t} \mid q, o_{i,<t})}{\pi_{\theta_{\text{old}}}(o_{i,t} \mid q, o_{i,<t})}$$
+$$r_{i,t}(\theta) = \frac{\pi_\theta(o_{i,t} \mid q, o_{i,\lt t})}{\pi_{\theta_{\text{old}}}(o_{i,t} \mid q, o_{i,\lt t})}$$
 
 This corrects for the distribution mismatch between rollout-time and update-time policies.
 
@@ -516,7 +516,7 @@ batch.
 **CISPO uses a different structural form.** Start from REINFORCE with importance-sampling correction for off-policy updates. The paper writes this as:
 
 $$\mathcal{J}_{\text{REINFORCE}}(\theta) = \mathbb{E}\left[\frac{1}{|o_i|}\sum_t \text{sg}(r_{i,t}(\theta)) \cdot \hat{A}_{i,t} \cdot \log \pi_\theta(o_{i,t} \mid q, 
-o_{i,<t})\right]$$
+o_{i,\lt t})\right]$$
 
 `sg` is the **stop-gradient** operator (`.detach()` in PyTorch). It returns its input's value during the forward pass but blocks gradient flow through it during backprop, so 
 the term inside `sg` is treated as a constant for differentiation. Here it's wrapped around $r_{i,t}(\theta)$ because $r$ has $\theta$ in its numerator (through 
@@ -526,7 +526,7 @@ its numerical value as a scaling coefficient on top of the standard policy gradi
 **CISPO's modification.** Same `clip(r)` operation, but used differently. Take REINFORCE's structural form above and substitute the clipped IS weight as the coefficient:
 
 $$\mathcal{J}_{\text{CISPO}}(\theta) = \mathbb{E}\left[\frac{1}{\sum_i |o_i|} \sum_{i,t} \text{sg}(\hat{r}_{i,t}(\theta)) \cdot \hat{A}_{i,t} \cdot \log \pi_\theta(o_{i,t} 
-\mid q, o_{i,<t})\right]$$
+\mid q, o_{i,\lt t})\right]$$
 
 with
 

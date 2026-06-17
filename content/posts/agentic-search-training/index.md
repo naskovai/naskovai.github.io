@@ -1,6 +1,5 @@
 ---
 title: "From Single-Pass RAG to Self-Editing Search Agents: Designing and Training Agentic Search"
-description: "How to design and train an LLM that searches well — not just retrieves. Covers the multi-turn observe-reason-act loop, SFT warmup on expert traces, RL with F-β rewards and CISPO for training stability, and the decoupled rollout architecture that makes it scale. Chroma's Context-1 as the running case study throughout."
 date: 2026-06-17T00:00:00-07:00
 categories: ["Machine Learning"]
 math: true

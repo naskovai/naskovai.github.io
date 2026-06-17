@@ -39,7 +39,7 @@ scale). Chroma's Context-1 (released March 2026) is the running case study throu
 
 ---
 
-# Part I — The Agent
+# Part I: The Agent
 
 ## 1. The Baseline: Single-Pass Retrieval
 
@@ -138,7 +138,7 @@ environment, not from better instructions.
 
 ---
 
-# Part II — The Policy
+# Part II: The Policy
 
 **Once you train a model with RL or SFT, the prompt template you trained with becomes part of the model.**
 
@@ -491,7 +491,7 @@ $$r_{i,t}(\theta) = \frac{\pi_\theta(o_{i,t} \mid q, o_{i,<t})}{\pi_{\theta_{\te
 This corrects for the distribution mismatch between rollout-time and update-time policies.
 
 **Both algorithms clip the same thing.** Both GRPO and CISPO apply the clip operator to $r_{i,t}(\theta)$, the IS ratio. What differs is *how the clipped value participates 
-in the loss* — and that determines whether clipping kills the gradient or just bounds it.
+in the loss*, and that determines whether clipping kills the gradient or just bounds it.
 
 **GRPO's loss.** GRPO inherits PPO's per-token loss term, which is the minimum of an unclipped and a clipped version. The full objective is:
 
@@ -555,7 +555,7 @@ gradient on groups where some rollouts succeed and others fail.
 
 ---
 
-# Part III — The System
+# Part III: The System
 
 ## 1. Decoupled Rollout: ProRL Agent and Rollout-as-a-Service
 
@@ -564,7 +564,7 @@ ProRL Agent addresses the systems inefficiency that emerges when rollout and tra
 Rollout is I/O-intensive: each search call hits a real API, document reads involve fetching and processing text, the agent might make 5-20 tool calls per trajectory, and each 
 call blocks. Training is GPU-intensive: forward passes, backward passes, gradient synchronization. Running both in the same process guarantees each workload starves the 
 other. ProRL Agent audited every major agentic RL framework (SkyRL, VeRL-Tool, Agent Lightning, rLLM, GEM) and found the same architectural decision: rollout embedded inside 
-the training loop. The measured cost: GPU utilization stuck around 42% even with load balancing applied in isolation — each optimization component helps, but only the full decoupled architecture reaches 78%.
+the training loop. The measured cost: GPU utilization stuck around 42% even with load balancing applied in isolation: each optimization component helps, but only the full decoupled architecture reaches 78%.
 
 ProRL Agent separates them. The rollout system runs as a standalone HTTP service. The trainer sends a task instance (a question to answer). The rollout server handles 
 everything: environment initialization, multi-turn agent execution, tool calls against the search API, reward computation. It returns a completed trajectory: the full 
@@ -629,19 +629,19 @@ The full stack:
 
 ```mermaid
 graph TD
-    subgraph TRAIN["TRAINING LAYER — Tinker / NeMo RL"]
+    subgraph TRAIN["TRAINING LAYER: Tinker / NeMo RL"]
         OPT["GRPO / CISPO Optimizer"]
         GF["Group Filtering"]
         CP["Policy Checkpoint"]
     end
 
-    subgraph ROLLOUT["ROLLOUT LAYER — ProRL Agent"]
+    subgraph ROLLOUT["ROLLOUT LAYER: ProRL Agent"]
         LOOP["Agent Loop<br/>observe → reason → act → answer<br/><br/>Tools: search · read · prune<br/>Enforced: dedup · token budget · turn limit"]
         RF["Reward Function<br/>F_β + penalties"]
         SEARCH["Search API"]
     end
 
-    subgraph INFER["INFERENCE LAYER — vLLM"]
+    subgraph INFER["INFERENCE LAYER: vLLM"]
         VM["Policy model serving for generation"]
     end
 
@@ -692,7 +692,7 @@ Against frontier models on the paper's generated benchmarks, Context-1 (1x) is c
 | gpt-5.2 | 0.95 | 0.92 | 0.93 |
 | sonnet-4.5 | 0.97 | 0.92 | 0.98 |
 
-Email is held-out: Context-1 was trained on web, finance, and legal data only, and the paper reports meaningful improvement over the base on email — evidence the learned search skills generalize beyond training distribution. This transfer continues on public benchmarks: Context-1 (4x) matches frontier models on BrowseComp-Plus (0.96), FRAMES (0.96), and HotpotQA (0.99), and is competitive on LongSeal (0.79) and Seal-0 (0.52). The four-rollout configuration runs in parallel and, given Context-1's per-call cost, remains cheaper than a single frontier-model call while matching frontier quality.
+Email is held-out: Context-1 was trained on web, finance, and legal data only, and the paper reports meaningful improvement over the base on email, evidence the learned search skills generalize beyond training distribution. This transfer continues on public benchmarks: Context-1 (4x) matches frontier models on BrowseComp-Plus (0.96), FRAMES (0.96), and HotpotQA (0.99), and is competitive on LongSeal (0.79) and Seal-0 (0.52). The four-rollout configuration runs in parallel and, given Context-1's per-call cost, remains cheaper than a single frontier-model call while matching frontier quality.
 
 On inference: Context-1 is served on an NVIDIA B200 with MXFP4 quantization on the MoE layers, producing 400-500 tokens per second end-to-end. Up to 10× faster than the 
 frontier models it matches on retrieval quality, at a fraction of the per-call cost.

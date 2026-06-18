@@ -164,13 +164,28 @@ From Aissi et al. (2024), the contrastive term augments the PPO loss:
 
 $$\mathcal{L}(\theta) = \mathcal{L}_{\text{PPO}}(\theta) + \alpha \cdot C(\theta)$$
 
-$C(\theta)$ is a triplet margin loss over hidden states: anchor is $(\text{content}, \text{template}_i)$, positive is the same content under $\text{template}_j$, negative is 
-different content under $\text{template}_i$. The triplets reuse the PPO rollouts, so the only added cost is one forward pass per alternate-template embedding ($\alpha = 0.5$ 
+Define $z_\theta(p)$ first, since the loss is built entirely out of it: it's the embedding of a rendered prompt $p$, a single hidden-state vector read off the running model 
+at one fixed token position and one fixed layer (which token and which layer, below). "Content" means the actual information being communicated, the question, the current 
+search state, the tool results so far; "template" means the specific phrasing and formatting used to render that content into text. The same content rendered with template 
+$i$ versus template $j$ produces two different prompts, $p_i$ and $p_j$, with different surface text but identical underlying information.
+
+$C(\theta)$ is a triplet margin loss over these embeddings:
+- **anchor** $= z_\theta(p_i)$: this rollout's content, rendered with the template it actually used.
+- **positive** $= z_\theta(p_j)$: the *same* content, re-rendered with a *different* template $j$.
+- **negative** $= z_\theta(p_i')$: *different* content (a different rollout in the batch), rendered with the *same* template $i$ as the anchor.
+
+The loss pulls anchor and positive together, since the same content should embed similarly no matter how it's phrased, and pushes anchor and negative apart, since different 
+content should embed differently even under identical phrasing.
+
+This doesn't require re-running the agent loop. The anchor embedding is just the hidden state already produced by the rollout's own forward pass under template $i$. The 
+negative embedding is another rollout already in the same batch, also rendered under template $i$, so it's also already computed, no new generation needed. The one genuinely 
+new thing is the positive: take the same content this rollout already produced and re-render it under template $j$ instead, then run it through the model once to read off 
+$z_\theta(p_j)$. That single extra forward pass per rollout (not a full re-rollout, just enough of a pass to extract one hidden state) is the entire added cost ($\alpha = 0.5$ 
 in the paper).
 
-The embedding $z_\theta(p)$ is a single hidden-state vector from the running model, picked at one token and one layer. Layer 1 works best; deeper layers degrade 
-monotonically. For encoder-decoder models the first token's layer-1 state already attends to the whole prompt and is used directly. For decoder-only models, a `<contrastive>` 
-token is prepended at position 0 with bidirectional attention to the rest of the prompt, and its layer-1 state serves as the embedding.
+Layer 1 works best; deeper layers degrade monotonically. For encoder-decoder models the first token's layer-1 state already attends to the whole prompt and is used directly. 
+For decoder-only models, a `<contrastive>` token is prepended at position 0 with bidirectional attention to the rest of the prompt, and its layer-1 state serves as the 
+embedding.
 
 The training templates must vary only formatting, ordering, delimiters, and phrasing, not fields, tools, or action semantics. The model becomes invariant to whatever axes you 
 varied during training.
@@ -260,12 +275,13 @@ of documents (typically 2-5) that share enough connective structure to support a
 2. **Generate the clues, question, and answer.** An LLM is prompted with the supporting documents and asked to produce: a clue paragraph that obfuscates facts spread across 
 them, a question whose answer requires resolving those clues, and the ground-truth answer string.
 
-3. **Verify by extraction.** Per supporting document:
-   - First, an LLM extracts paired `(document_quote, clue_quote)` spans and flags whether the answer string appears in the document.
-   - Second, code checks each `document_quote` is a real substring of the source.
-   - Third, code checks the answer string was found in at least one document.
-   - Tasks failing the second or third check are dropped.
-   - Humans spot-check pair alignment on a sample; reported LLM-human agreement is >80% across all four domains (84.4% web, 93% finance, 98.3% legal, 87.5% email).
+3. **Verify by extraction.** For each supporting document, an LLM extracts a `(document_quote, clue_quote)` pair plus a flag for whether the document contains the answer. A 
+   deterministic check then confirms each `document_quote` is a real, normalized substring of the source. A task is dropped if either condition fails: some supporting 
+   document's quote doesn't actually appear in the source, or none of the supporting documents contain the answer. This automated check is what filters the dataset.
+   
+   Separately, humans spot-check a sample of the extracted `(document_quote, clue_quote)` pairs, only confirming the quote supports the clue rather than reading full 
+   documents, to measure how trustworthy the LLM's extraction is. This doesn't drop anything itself; it's a reliability audit on the extraction step, not a second filtering 
+   layer. Reported agreement: 84.4% (web), 93% (finance), 98.3% (legal), 87.5% (email), all above the paper's 80% threshold.
 
 4. **Optionally collect distractors.** For domains where distractors don't emerge naturally from the corpus, the pipeline searches for additional documents that match some of 
 the clues but lead to wrong answers. Each candidate distractor is run through an inverse check: an LLM extracts any occurrence of the answer in any form, and if it matches, 

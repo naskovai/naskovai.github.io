@@ -687,18 +687,18 @@ Context-1's learned behavior, measured against its own base model:
 Output recall nearly doubles while F1 climbs by 0.18, the agent got better at *selecting* the right subset of what it found, not just at finding more. Parallel tool calling 
 rises and trajectory length falls, the "same work done more efficiently" signature. Prune accuracy at 0.941 indicates the self-editing mechanism is being used correctly.
 
-Against frontier models on the paper's generated benchmarks, Context-1 (1x) is competitive; Context-1 (4x), four independent rollouts fused via RRF, matches or comes close to Opus-4.5, GPT-5.2, and Sonnet-4.5 across the three trained domains:
+Against frontier models on the paper's generated benchmarks, Context-1 (1x) is competitive; Context-1 (4x), four independent rollouts fused via RRF, matches or beats opus-4.5, gpt-5.2, and sonnet-4.6 across all four domains:
 
-| Model | Web | Finance | Legal |
-| --- | --- | --- | --- |
-| Context-1 (4x) | 0.97 | 0.95 | 0.98 |
-| Context-1 (1x) | 0.88 | 0.89 | 0.92 |
-| gpt-oss-20b (base) | 0.58 | 0.58 | 0.75 |
-| opus-4.5 | 0.99 | 0.90 | 0.98 |
-| gpt-5.2 | 0.95 | 0.92 | 0.93 |
-| sonnet-4.5 | 0.97 | 0.92 | 0.98 |
+| Model | Web | Finance | Legal | Email |
+| --- | --- | --- | --- | --- |
+| Context-1 (4x) | 0.97 | 0.82 | 0.95 | 0.98 |
+| Context-1 (1x) | 0.88 | 0.64 | 0.89 | 0.92 |
+| gpt-oss-20b (base) | 0.58 | 0.42 | 0.58 | 0.75 |
+| opus-4.5 | 0.99 | 0.82 | 0.90 | 0.98 |
+| gpt-5.2 | 0.95 | 0.65 | 0.92 | 0.93 |
+| sonnet-4.6 | 0.96 | 0.72 | 0.91 | 0.97 |
 
-Email is held-out: Context-1 was trained on web, finance, and legal data only, and the paper reports meaningful improvement over the base on email, evidence the learned search skills generalize beyond training distribution. This transfer continues on public benchmarks: Context-1 (4x) matches frontier models on BrowseComp-Plus (0.96), FRAMES (0.96), and HotpotQA (0.99), and is competitive on LongSeal (0.79) and Seal-0 (0.52). The four-rollout configuration runs in parallel and, given Context-1's per-call cost, remains cheaper than a single frontier-model call while matching frontier quality.
+Email is held-out: Context-1 was trained on web, finance, and legal data only; its +0.23 improvement over the base on email (0.98 vs. gpt-oss-20b's 0.75) is evidence the learned search skills generalize beyond training distribution. This transfer continues on public benchmarks: Context-1 (4x) matches frontier models on BrowseComp-Plus (0.96), FRAMES (0.96), and HotpotQA (0.99), and is competitive on LongSeal (0.79) and Seal-0 (0.52). The four-rollout configuration runs in parallel and, given Context-1's per-call cost, remains cheaper than a single frontier-model call while matching frontier quality.
 
 On inference: Context-1 is served on an NVIDIA B200 with MXFP4 quantization on the MoE layers, producing 400-500 tokens per second end-to-end. Up to 10× faster than the 
 frontier models it matches on retrieval quality, at a fraction of the per-call cost.

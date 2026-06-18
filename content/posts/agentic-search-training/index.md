@@ -39,9 +39,9 @@ scale). Chroma's Context-1 (released March 2026) is the running case study throu
 
 ---
 
-# Part I: The Agent
+## Part I: The Agent
 
-## 1. The Baseline: Single-Pass Retrieval
+### 1. The Baseline: Single-Pass Retrieval
 
 The starting point everyone has. A query comes in, you embed it, retrieve the top-k chunks from your index, stuff them into the LLM's context window, and generate an answer. 
 This is vanilla RAG, and for a significant class of questions it works well: direct factual lookups where a single chunk contains the answer and the user's query is close 
@@ -67,7 +67,7 @@ performance degrades. Longer context is not a substitute for better retrieval.
 
 ---
 
-## 2. The Harness: Multi-Turn Search and Runtime Constraints
+### 2. The Harness: Multi-Turn Search and Runtime Constraints
 
 The fix for single-pass limitations is conceptually simple: put the LLM in a loop. The agent reads the user's question, formulates a search query, executes it against your 
 API, inspects the results, and decides whether to search again with a refined query, read a specific document in full, or stop and synthesize an answer. This is the 
@@ -87,12 +87,12 @@ executes them, and the results get appended to the conversation. This continues 
 This loop solves all three problems from Section 1. Multi-hop queries become multi-turn conversations. Ambiguous queries get decomposed into concrete sub-queries across 
 turns. Scattered evidence accumulates over multiple retrievals. The loop also introduces design decisions in the harness itself.
 
-### Deduplication-Aware Retrieval
+#### Deduplication-Aware Retrieval
 
 Semantically similar queries across turns retrieve the same chunks. The harness tracks every chunk ID returned in the trajectory and excludes them from subsequent search 
 results.
 
-### Token Budget Enforcement
+#### Token Budget Enforcement
 
 Without a budget, the context window fills monotonically with accumulated retrievals. This is Context Rot happening within a single trajectory.
 
@@ -138,7 +138,7 @@ environment, not from better instructions.
 
 ---
 
-# Part II: The Policy
+## Part II: The Policy
 
 **Once you train a model with RL or SFT, the prompt template you trained with becomes part of the model.**
 
@@ -179,7 +179,7 @@ For the rest of Part II, assume single-template training (Context-1's choice).
 
 ---
 
-## 1. Context-1's Synthetic Task Generation
+### 1. Context-1's Synthetic Task Generation
 
 Context-1's training tasks are, as the paper acknowledges, "needle-in-a-haystack style questions: multi-constraint queries designed to locate a single specific answer." Real 
 search is "more abstract; the user does not specify every criterion needed to verify the final result." The format chosen here is what enables verifiable ground truth at 
@@ -191,7 +191,7 @@ bundle multiple constraints into the prompt; Context-1's clue paragraph just spr
 The same synthetic dataset feeds both training stages: SFT runs an expert model on the tasks to generate trajectories, RL uses the tasks as queries for the training policy to 
 roll out against.
 
-### Input
+#### Input
 
 The agent receives two things at inference time: a prompt and a corpus.
 
@@ -223,7 +223,7 @@ agent should retrieve) and distractors (which it should reject), with no flag di
 - **Email**: the Epstein email release (used because it post-dates training cutoffs of evaluated models) augmented with Enron emails (with names and dates swapped) as 
 plausible filler.
 
-### Label
+#### Label
 
 A (supporting documents, answer) pair, used to score the agent's output. SFT uses the supporting document set to filter expert trajectories by recall (trajectories that 
 didn't find these documents are downsampled). RL uses it to compute the $F_\beta$ reward in Section 4.
@@ -244,13 +244,13 @@ The Grande Synagogue page contains the date "20 September 1878" verbatim. A naiv
 documents (the Belgian Jewish Community page, the SS Vaderland page) provide the cross-references the agent uses to reject distractors matching subsets of the clues. The 
 paper allows the agent to terminate as soon as it surfaces the answer-bearing document.
 
-### Distractors
+#### Distractors
 
 Optional. Documents that satisfy some clue criteria but point to a wrong answer. They live in the corpus alongside supporting documents with no separating flag, so the agent 
 has to recognize them as misleading from search results alone. Distractors are collected per-task in the web and email domains; for finance they emerge naturally from the 
 company-scoped corpus, since the corpus already contains many filings unrelated to the specific question.
 
-### Construction Pipeline
+#### Construction Pipeline
 
 A task is built in five steps:
 
@@ -281,7 +281,7 @@ documents is unaffordable. Forcing the LLM to commit to a specific span makes th
 
 ---
 
-## 2. Adaptation Method: Full Fine-Tuning vs LoRA
+### 2. Adaptation Method: Full Fine-Tuning vs LoRA
 
 Both SFT and RL below can be implemented with full fine-tuning or with parameter-efficient adaptation. The choice has compounding consequences.
 
@@ -330,7 +330,7 @@ Assume LoRA-based adaptation for the rest of Part II. SFT trains LoRA adapters o
 
 ---
 
-## 3. Imitation: SFT on Expert Traces
+### 3. Imitation: SFT on Expert Traces
 
 The most natural training approach: generate good search trajectories, then supervise the model on them.
 
@@ -383,7 +383,7 @@ pool.
 
 ---
 
-## 4. Outcomes: End-to-End RL and Reward Design
+### 4. Outcomes: End-to-End RL and Reward Design
 
 SFT gets the model into the task. RL is the second stage that pushes past the imitation ceiling: let the model explore different search strategies on its own, score each 
 trajectory by whether it *actually worked* (did the agent find the right documents? did the final answer match?), and update the policy toward strategies that produce good 
@@ -472,7 +472,7 @@ end-to-end. Context-1's authors reject this for two reasons. First, it confounds
 the search agent retrieved insufficient evidence or the reasoning model failed to use what was provided. Second, it doubles cost: every rollout requires an additional LLM 
 call per episode.
 
-### CISPO Instead of GRPO
+#### CISPO Instead of GRPO
 
 Context-1 uses CISPO (Clipped IS-weight Policy Optimization), introduced in the MiniMax-M1 paper and recommended by ScaleRL. The mechanical difference from GRPO is small but 
 consequential.
@@ -561,9 +561,9 @@ gradient on groups where some rollouts succeed and others fail.
 
 ---
 
-# Part III: The System
+## Part III: The System
 
-## 1. Decoupled Rollout: ProRL Agent and Rollout-as-a-Service
+### 1. Decoupled Rollout: ProRL Agent and Rollout-as-a-Service
 
 ProRL Agent addresses the systems inefficiency that emerges when rollout and training fight for the same resources at scale.
 
@@ -629,7 +629,7 @@ the training orchestrator.
 
 ---
 
-## 2. The Full Stack: Results and Recipe
+### 2. The Full Stack: Results and Recipe
 
 The full stack:
 

@@ -482,9 +482,12 @@ $o_{i,\lt t}$ is everything generated before it. So $\pi_\theta(o_{i,t} \mid q, 
 prefix so far. A "group" is the set of $G$ responses sampled from a single prompt.
 
 **Importance sampling, briefly.** GRPO collects a batch of rollouts using the old policy $\pi_{\theta_{\text{old}}}$, then runs multiple *gradient substeps* on that same 
-batch before re-rolling out. A substep is one gradient update; "4 substeps per step" means four parameter updates on the same set of trajectories. After substep 1, the 
-current policy $\pi_\theta$ has already shifted from the policy that generated the rollouts, so substeps 2 onward are off-policy with respect to the rollout distribution. To 
-correct for this drift, token-level updates are reweighted by the *importance sampling ratio*:
+batch before re-rolling out. Each substep is a full gradient update over the entire batch, not a partial pass over a slice of it: "4 substeps" means the same set of 
+trajectories gets reused for 4 successive full gradient updates before being discarded and replaced with a fresh rollout batch. This amortizes the cost of rollout, since 
+generating a batch of multi-turn agentic trajectories against a real search API is the expensive part (each trajectory can take minutes), and squeezing more gradient signal 
+out of a batch you already paid for is cheaper than collecting a new one. After substep 1, the current policy $\pi_\theta$ has already shifted from the policy that generated 
+the rollouts, so substeps 2 onward are off-policy with respect to the rollout distribution. To correct for this drift, token-level updates are reweighted by the *importance 
+sampling ratio*:
 
 $$r_{i,t}(\theta) = \frac{\pi_\theta(o_{i,t} \mid q, o_{i,\lt t})}{\pi_{\theta_{\text{old}}}(o_{i,t} \mid q, o_{i,\lt t})}$$
 
@@ -545,9 +548,12 @@ Context-1's authors report CISPO as critical for preventing entropy collapse as 
 CISPO was what held stability past ~200 training steps.
 
 **Training schedule.** A *step* is one rollout-then-update iteration: generate 1,024 trajectories (128 queries × 8 rollouts each), then take 4 gradient *substeps* on that 
-batch before discarding it and rolling out fresh. Each substep is one gradient update; substeps 2-4 are off-policy with respect to the rollout distribution and rely on the IS 
-correction discussed above. The full run is 5 epochs over the training set, ~300 steps total, with convergence observed around step 230. The base model is gpt-oss-20b adapted 
-via LoRA; full fine-tuning is avoided both to keep compute manageable and to preserve the base model's general capabilities.
+same batch of 1,024 trajectories before discarding it and rolling out fresh. Each substep is a full gradient update over all 1,024 trajectories, not a quarter of them; "4 
+substeps" means 4 successive full updates on data that gets progressively more off-policy. Substeps 2-4 are off-policy with respect to the rollout distribution and rely on 
+the IS correction discussed above. This is the standard PPO/GRPO move for expensive-rollout regimes (ScaleRL reports running PipelineRL with up to 8 substeps; Context-1's 4 
+is more conservative), since it amortizes the cost of an expensive rollout batch across multiple gradient updates instead of generating a fresh batch per update. The full run 
+is 5 epochs over the training set, ~300 steps total, with convergence observed around step 230. The base model is gpt-oss-20b adapted via LoRA; full fine-tuning is avoided 
+both to keep compute manageable and to preserve the base model's general capabilities.
 
 **Group filtering.** Within a group of $G$ rollouts for the same query, if all $G$ receive identical rewards (all succeed, all fail), the group-normalized advantage is zero 
 for every token in every rollout and the group contributes no gradient to the update. Context-1 detects and discards these groups before the loss computation, focusing the 
